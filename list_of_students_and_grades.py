@@ -8,6 +8,32 @@ def calculate_overall_average(students):
     return sum(all_grades) / len(all_grades) if all_grades else 0
 
 
+def print_students_info(students):
+    for student in students:
+        average = calculate_average(student["grades"])
+        status = "Успешный" if average >= 75 else "Отстающий"
+        print(f"Студент: {student['name']}",
+              f"Средний балл: {average:.2f};",
+              f"Статус: {status}",
+              sep="\n", end="\n\n")
+    print(f"Общий средний балл: {calculate_overall_average(students):.2f}\n")
+
+
+def add_student(students, name, grades):
+    new_student = {"name": name, "grades": grades}
+    students.append(new_student)
+    print(f"Добавлен новый студент: {new_student}",
+          f"Общий средний балл: {calculate_overall_average(students):.2f}",
+          sep="\n", end="\n\n")
+
+
+def remove_student(students, index):
+    removed_student = students.pop(index)
+    print(f"Удалён студент: {removed_student}",
+          f"Общий средний балл: {calculate_overall_average(students):.2f}",
+          sep="\n", end="\n\n")
+
+
 students = [
     {"name": "Catelyn Stark", "grades": [86, 55, 73, 69]},
     {"name": "Daenerys Targaryen", "grades": [79, 88, 90, 92]},
@@ -17,17 +43,8 @@ students = [
     {"name": "Tyrion Lannister", "grades": [84, 63, 92, 97]},
 ]
 
-for student in students:
-    average = calculate_average(student["grades"])
-    status = "Успешный" if average >= 75 else "Отстающий"
-    print(f"Студент: {student['name']}", f"Средний балл: {average:.2f};", f"Статус: {status}", sep="\n", end="\n\n")
+print_students_info(students)
 
-print(f"Общий средний балл: {calculate_overall_average(students):.2f}\n")
+add_student(students, "Jon Snow", [85, 94, 95, 96])
 
-new_student = {"name": "Jon Snow", "grades": [85, 94, 95, 96]}
-students.append(new_student)
-print(f"Добавлен новый студент: {students[6]}", f"Общий средний балл: {calculate_overall_average(students):.2f}",
-      sep="\n")
-
-print(f"\nУдалён студент: {students.pop(0)}", f"Общий средний балл: {calculate_overall_average(students):.2f}",
-      sep="\n")
+remove_student(students, 0)
