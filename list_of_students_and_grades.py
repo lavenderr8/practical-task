@@ -1,16 +1,24 @@
 def calculate_average(grades):
-    average_value = sum(grades) / len(grades)
-    return average_value
+    return sum(grades) / len(grades)
 
 
 def calculate_overall_average(students):
-    all_grades = [grade for student in students for grade in student["grades"]]
-    return sum(all_grades) / len(all_grades) if all_grades else 0
+    sums = [sum(student['grades']) for student in students]
+    count = sum(len(student['grades']) for student in students)
+    total_sum = sum(sums)
+    return total_sum / count if count else 0
+
+
+def get_lowest_student_index(students):
+    if not students:
+        return None
+    averages = [calculate_average(student['grades']) for student in students]
+    return averages.index(min(averages))
 
 
 def print_students_info(students):
     for student in students:
-        average = calculate_average(student["grades"])
+        average = calculate_average(student['grades'])
         status = "Успешный" if average >= 75 else "Отстающий"
         print(f"Студент: {student['name']}",
               f"Средний балл: {average:.2f};",
@@ -28,10 +36,12 @@ def add_student(students, name, grades):
 
 
 def remove_student(students, index):
-    removed_student = students.pop(index)
-    print(f"Удалён студент: {removed_student}",
-          f"Общий средний балл: {calculate_overall_average(students):.2f}",
-          sep="\n", end="\n\n")
+    if 0 <= index < len(students):
+        removed = students.pop(index)
+        print(f"Удалён самый отстающий студент: {removed['name']}\n")
+        print_students_info(students)
+    else:
+        print("Ошибка: неверный индекс.")
 
 
 students = [
@@ -47,4 +57,7 @@ print_students_info(students)
 
 add_student(students, "Jon Snow", [85, 94, 95, 96])
 
-remove_student(students, 0)
+lowest_index = get_lowest_student_index(students)
+if lowest_index is not None:
+    print(f"Самый отстающий студент: {students[lowest_index]['name']}")
+    remove_student(students, lowest_index)
